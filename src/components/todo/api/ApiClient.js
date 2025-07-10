@@ -1,10 +1,7 @@
-import axios from 'axios'
+import axios from 'axios';
 
-export const apiClient=axios.create(
+export const apiClient = axios.create(
        {
-              baseURL: 'http://localhost:8080'
-       }
+  baseURL: 'https://my-todo-api.onrender.com'
+   }
 );
-
-
-
