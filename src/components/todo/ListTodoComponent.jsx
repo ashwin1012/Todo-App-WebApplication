@@ -18,7 +18,7 @@ function ListTodoComponent() {
 
     const[message,setMessage]=useState()
 
-    useEffect( () =>  refreshTodos(), [])
+    useEffect( () =>  refreshTodos(), [refreshTodos])
 
 function refreshTodos() {
     retriveAllTodosForUsernameApi(username)
