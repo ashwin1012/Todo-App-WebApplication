@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { createTodoApi, retriveTodosApi, updateTodosApi } from "./api/TodoApiService"
 import { useAuth } from "./security/AuthContext"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import moment from "moment"
 
@@ -14,21 +14,36 @@ export default function TodoComponent() {
     const navigate=useNavigate();
     const username = authContext.username;
 
-    useEffect(
-        () => retriveTodos(), 
-        [id]
-     )
+    // useEffect(
+    //     () => retriveTodos(), 
+    //     [id]
+    //  )
 
-    function retriveTodos() {
-        if(id != -1){
-            retriveTodosApi(username, id)
-                .then(response => {
-                    setDescription(response.data.description);
-                    setTargetDate(response.data.targetDate);
-                })
-                .catch(error => console.log(error));
-            }
+    // function retriveTodos() {
+    //     if(id != -1){
+    //         retriveTodosApi(username, id)
+    //             .then(response => {
+    //                 setDescription(response.data.description);
+    //                 setTargetDate(response.data.targetDate);
+    //             })
+    //             .catch(error => console.log(error));
+    //         }
+    // }
+
+    const retriveTodos = useCallback(() => {
+    if (id !== "-1") {
+        retriveTodosApi(username, id)
+            .then(response => {
+                setDescription(response.data.description);
+                setTargetDate(response.data.targetDate);
+            })
+            .catch(error => console.log(error));
     }
+    }, [id, username]);
+
+    useEffect(() => {
+        retriveTodos();
+    }, [retriveTodos]);
 
    function onSubmit(values) {
         console.log("Form submitted with values:", values);
