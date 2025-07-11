@@ -56,7 +56,7 @@ export default function TodoComponent() {
         }
 
         console.log(todo)
-        if(id==-1){
+        if(id===-1){
             createTodoApi(username,todo)
             .then(response => {
                 navigate('/todos')
@@ -78,7 +78,7 @@ export default function TodoComponent() {
             errors.description = 'Enter atleast 5 characters'
         }
 
-      if (values.targetDate == null || values.targetDate == '' || !moment(values.targetDate).isValid()) {
+     if (values.targetDate === null || values.targetDate === '' || !moment(values.targetDate).isValid()) {
            errors.targetDate = 'Enter a target date';
         }
 
