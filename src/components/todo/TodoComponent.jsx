@@ -9,26 +9,13 @@ export default function TodoComponent() {
     const { id } = useParams();
     const [description, setDescription] = useState('');
     const [targetDate, setTargetDate] = useState('');
+    const [done, setDone] = useState('');
 
     const authContext = useAuth();
     const navigate=useNavigate();
     const username = authContext.username;
 
-    // useEffect(
-    //     () => retriveTodos(), 
-    //     [id]
-    //  )
 
-    // function retriveTodos() {
-    //     if(id != -1){
-    //         retriveTodosApi(username, id)
-    //             .then(response => {
-    //                 setDescription(response.data.description);
-    //                 setTargetDate(response.data.targetDate);
-    //             })
-    //             .catch(error => console.log(error));
-    //         }
-    // }
 
     const retriveTodos = useCallback(() => {
     if (id !== "-1") {
@@ -36,6 +23,7 @@ export default function TodoComponent() {
             .then(response => {
                 setDescription(response.data.description);
                 setTargetDate(response.data.targetDate);
+                setDone(response.data.done);
             })
             .catch(error => console.log(error));
     }
@@ -52,7 +40,7 @@ export default function TodoComponent() {
             username: username,
             description: values.description ,
             targetDate: values.targetDate ,
-            done : false
+            done : values.done
         }
 
         console.log(todo)
@@ -91,13 +79,14 @@ export default function TodoComponent() {
             <h1>Enter Todo Details</h1>
             <div>
                 <Formik 
-                initialValues={{ description, targetDate }}
-                enableReinitialize={true}
-                onSubmit={onSubmit}
-                validate={validate}
-                validateOnChange={false}
-                validateOnBlur={false}
+                    initialValues={{ description, targetDate, done: 'Pending' }} 
+                    enableReinitialize={true}
+                    onSubmit={onSubmit}
+                    validate={validate}
+                    validateOnChange={false}
+                    validateOnBlur={false}
                 >
+
                         <Form>
                             <ErrorMessage
                                     name="description"
@@ -117,6 +106,15 @@ export default function TodoComponent() {
                                 <label>Target Date</label>
                                 <Field type="date" className="form-control" name="targetDate" />
                             </fieldset>
+                            <fieldset className="form-group mb-3">
+                                <label>Status</label>
+                                <Field as="select" className="form-control" name="done">
+                                    <option value="Pending">Pending</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Rejected">Rejected</option>
+                                </Field>
+                            </fieldset>
+
                             <div>
                             <button className="btn btn-primary" type="submit">Save</button>
                             </div>

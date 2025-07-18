@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { retriveAllTodosForUsernameApi, deleteTodosApi } from './api/TodoApiService';
+import { retriveAllTodosForUsernameApi, deleteTodosApi, updateTodosApi } from './api/TodoApiService';
 import { useAuth } from "./security/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -38,6 +38,28 @@ function ListTodoComponent() {
         navigate(`/todo/-1`)
     }
 
+    function handleDoneChange(e, id) {
+    const selectedValue = e.target.value;
+
+    const updatedDone = selectedValue === 'Completed'; 
+    const todoToUpdate = todos.find(todo => todo.id === id);
+    if (!todoToUpdate) return;
+
+    const updatedTodo = {
+        ...todoToUpdate,
+        done: updatedDone
+    };
+
+    updateTodosApi(username, id, updatedTodo)
+        .then(() => {
+            setMessage(`Updated todo status for id=${id}`);
+            refreshTodos();
+        })
+        .catch(error => console.log(error));
+}
+
+
+
     return (
         <div className='container'>
             <h2>Things You Want Todo!</h2>
@@ -57,10 +79,21 @@ function ListTodoComponent() {
                     {todos.map(todo => (
                         <tr key={todo.id}>
                             <td>{todo.description}</td>
-                            <td>{todo.done.toString()}</td>
+                            <td>
+                                <select value={todo.done ? 'Completed' : 'Pending'} onChange={(e) => handleDoneChange(e, todo.id)}>
+                                <option value="Completed">Completed</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+
+                            </td>
                             <td>{todo.targetDate.toString()}</td>
-                            <td><button className="btn btn-warning" onClick={() => deleteTodo(todo.id)}>Delete</button></td>
-                            <td><button className="btn btn-success" onClick={() => updateTodo(todo.id)}>Update</button></td>
+                            <td>
+                                <button className="btn btn-warning" onClick={() => deleteTodo(todo.id)}>Delete</button>
+                            </td>
+                            <td>
+                                <button className="btn btn-success" onClick={() => updateTodo(todo.id)}>Update</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
