@@ -57,6 +57,7 @@ export default function TodoComponent() {
                 })
             .catch(error => console.log(error));
         }
+        console.log("Form submitted with values:", values);
     }
 
     function validate(values) {
@@ -79,7 +80,7 @@ export default function TodoComponent() {
             <h1>Enter Todo Details</h1>
             <div>
                 <Formik 
-                    initialValues={{ description, targetDate, done: 'Pending' }} 
+                    initialValues={{ description, targetDate, done }} 
                     enableReinitialize={true}
                     onSubmit={onSubmit}
                     validate={validate}
@@ -109,11 +110,13 @@ export default function TodoComponent() {
                             <fieldset className="form-group mb-3">
                                 <label>Status</label>
                                 <Field as="select" className="form-control" name="done">
+                                    <option value="" label="Select a value" /> 
                                     <option value="Pending">Pending</option>
                                     <option value="Completed">Completed</option>
                                     <option value="Rejected">Rejected</option>
                                 </Field>
                             </fieldset>
+
 
                             <div>
                             <button className="btn btn-primary" type="submit">Save</button>

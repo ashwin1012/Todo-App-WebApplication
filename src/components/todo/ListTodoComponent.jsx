@@ -41,7 +41,7 @@ function ListTodoComponent() {
     function handleDoneChange(e, id) {
     const selectedValue = e.target.value;
 
-    const updatedDone = selectedValue === 'Completed'; 
+    const updatedDone = selectedValue; 
     const todoToUpdate = todos.find(todo => todo.id === id);
     if (!todoToUpdate) return;
 
@@ -79,14 +79,7 @@ function ListTodoComponent() {
                     {todos.map(todo => (
                         <tr key={todo.id}>
                             <td>{todo.description}</td>
-                            <td>
-                                <select value={todo.done ? 'Completed' : 'Pending'} onChange={(e) => handleDoneChange(e, todo.id)}>
-                                <option value="Completed">Completed</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Rejected">Rejected</option>
-                            </select>
-
-                            </td>
+                            <td>{todo.done}</td>
                             <td>{todo.targetDate.toString()}</td>
                             <td>
                                 <button className="btn btn-warning" onClick={() => deleteTodo(todo.id)}>Delete</button>
