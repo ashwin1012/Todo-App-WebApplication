@@ -38,28 +38,6 @@ function ListTodoComponent() {
         navigate(`/todo/-1`)
     }
 
-    function handleDoneChange(e, id) {
-    const selectedValue = e.target.value;
-
-    const updatedDone = selectedValue; 
-    const todoToUpdate = todos.find(todo => todo.id === id);
-    if (!todoToUpdate) return;
-
-    const updatedTodo = {
-        ...todoToUpdate,
-        done: updatedDone
-    };
-
-    updateTodosApi(username, id, updatedTodo)
-        .then(() => {
-            setMessage(`Updated todo status for id=${id}`);
-            refreshTodos();
-        })
-        .catch(error => console.log(error));
-}
-
-
-
     return (
         <div className='container'>
             <h2>Things You Want Todo!</h2>
