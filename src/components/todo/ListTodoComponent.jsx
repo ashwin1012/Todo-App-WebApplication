@@ -1,21 +1,22 @@
 import { useEffect, useState, useCallback } from "react";
-import { retriveAllTodosForUsernameApi, deleteTodosApi, updateTodosApi } from './api/TodoApiService';
+import { retriveAllTodosForUsernameApi, deleteTodosApi } from './api/TodoApiService';
 import { useAuth } from "./security/AuthContext";
 import { useNavigate } from "react-router-dom";
+import moment from "moment"; // for better date formatting
 
 function ListTodoComponent() {
-    const authContext = useAuth()
-    const username = authContext.username
-    const navigate = useNavigate()
+    const authContext = useAuth();
+    const username = authContext.username;
+    const navigate = useNavigate();
 
-    const [todos, setTodos] = useState([])
-    const [message, setMessage] = useState()
+    const [todos, setTodos] = useState([]);
+    const [message, setMessage] = useState();
 
     const refreshTodos = useCallback(() => {
         retriveAllTodosForUsernameApi(username)
             .then(response => setTodos(response.data))
-            .catch(error => console.log(error))
-    }, [username])
+            .catch(error => console.error("Failed to fetch todos:", error));
+    }, [username]);
 
     useEffect(() => {
         refreshTodos();
@@ -24,30 +25,41 @@ function ListTodoComponent() {
     function deleteTodo(id) {
         deleteTodosApi(username, id)
             .then(() => {
-                setMessage(`Delete of todo with id= ${id} successful`)
-                refreshTodos()
+                setMessage(`Todo with ID ${id} deleted successfully`);
+                refreshTodos();
             })
-            .catch(error => console.log(error))
+            .catch(error => console.error("Delete failed:", error));
     }
 
     function updateTodo(id) {
-        navigate(`/todo/${id}`)
+        navigate(`/todo/${id}`);
     }
 
     function addNewTodo() {
-        navigate(`/todo/-1`)
+        navigate(`/todo/-1`);
+    }
+
+    // Optional: Add colored status badges
+    function renderStatus(status) {
+        const className = {
+            Completed: "badge bg-success",
+            Pending: "badge bg-warning text-dark",
+            Rejected: "badge bg-danger"
+        }[status] || "badge bg-secondary";
+
+        return <span className={className}>{status}</span>;
     }
 
     return (
-        <div className='container'>
-            <h2>Things You Want Todo!</h2>
-            {message && <div className="alert alert-warning">{message}</div>}
+        <div className="container">
+            <h2 className="my-4">Things You Want To Do</h2>
+            {message && <div className="alert alert-success">{message}</div>}
 
-            <table className='table'>
-                <thead>
+            <table className="table table-striped">
+                <thead className="table-dark">
                     <tr>
                         <th>Description</th>
-                        <th>Done</th>
+                        <th>Status</th>
                         <th>Target Date</th>
                         <th>Delete</th>
                         <th>Update</th>
@@ -57,22 +69,22 @@ function ListTodoComponent() {
                     {todos.map(todo => (
                         <tr key={todo.id}>
                             <td>{todo.description}</td>
-                            <td>{todo.done}</td>
-                            <td>{todo.targetDate.toString()}</td>
+                            <td>{renderStatus(todo.done)}</td>
+                            <td>{moment(todo.targetDate).format('YYYY-MM-DD')}</td>
                             <td>
-                                <button className="btn btn-warning" onClick={() => deleteTodo(todo.id)}>Delete</button>
+                                <button className="btn btn-outline-danger btn-sm" onClick={() => deleteTodo(todo.id)}>Delete</button>
                             </td>
                             <td>
-                                <button className="btn btn-success" onClick={() => updateTodo(todo.id)}>Update</button>
+                                <button className="btn btn-outline-primary btn-sm" onClick={() => updateTodo(todo.id)}>Update</button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
-            <div className="btn btn-success m-5" onClick={addNewTodo}>Add Todo</div>
+            <button className="btn btn-success mt-4" onClick={addNewTodo}>Add Todo</button>
         </div>
-    )
+    );
 }
 
 export default ListTodoComponent;
