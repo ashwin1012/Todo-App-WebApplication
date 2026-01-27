@@ -1,55 +1,78 @@
-.container {
-    max-width: 600px;
-    margin: 40px auto;
-    background-color: #f8f9fa;
-    padding: 30px 40px;
+body {
+    background-color: #f0f2f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.todo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.todo-card {
+    background-color: #fff;
+    padding: 40px 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 500px;
 }
 
-h1 {
-    font-size: 28px;
-    margin-bottom: 25px;
+.todo-card h1 {
     text-align: center;
-    color: #343a40;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #2c3e50;
 }
 
+/* Keep labels full width */
 .form-group label {
     font-weight: 500;
-    color: #495057;
+    color: #0c0d0e;
+    background-color: #199023;
+    margin-bottom: 6px;
+    display: block;
+    text-align: center; /* optional: center label text */
 }
 
+/* Make input/select fields smaller and centered */
 .form-control {
-    padding: 4px 8px;
+    width: 95%;          
+    margin: 0 auto 15px; 
+    padding: 10px 12px;
     font-size: 15px;
+    border-radius: 8px;
     border: 1px solid #ced4da;
-    border-radius: 6px;
-    transition: border-color 0.3s;
+    transition: 0.3s all;
 }
 
 .form-control:focus {
-    border-color: #80bdff;
-    box-shadow: none;
+    border-color: #48b461;
+    box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.2);
 }
+
 
 .alert.alert-warning {
-    margin-bottom: 15px;
-    padding: 8px 12px;
-    font-size: 14px;
+    font-size: 13px;
+    padding: 6px 10px;
     border-radius: 5px;
+    margin-bottom: 12px;
 }
 
-button.btn-primary {
+.btn-save {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
-    font-weight: 500;
-    border-radius: 6px;
-    background-color: #007bff;
+    font-weight: 600;
+    border-radius: 8px;
     border: none;
-    transition: background-color 0.3s;
+    background-color: #48b461;
+    color: white;
+    transition: 0.3s background-color;
+    cursor: pointer;
 }
 
-button.btn-primary:hover {
-    background-color: #0056b3;
+.btn-save:hover {
+    background-color: #3a9853;
 }
