@@ -1,55 +1,79 @@
 import { useState } from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from './security/AuthContext'
+import './LoginComponent.css'   
 
-function LoginComponent(){
+function LoginComponent() {
 
-    const[username, setUsername]=useState('')
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
 
-    const[password, setPassword]=useState('')
+    const navigate = useNavigate()
+    const authContext = useAuth()
 
-    const[showErroeMessage, setErrorMessage]=useState(false)
+    const handleSubmit = async () => {
 
-    const navigate=useNavigate()
+        setShowErrorMessage(false)
 
-    const authContext=useAuth()
+        if (username.trim() === "" || password.trim() === "") {
+            setShowErrorMessage(true)
+            return
+        }
 
-    function handleUsernameChange(event){
-         setUsername(event.target.value)
-    }
-
-    function handlePasswordChange(event){
-        setPassword(event.target.value)
-    }
-
-    async function handleSubmit(){
-        if(await authContext.login(username, password)){
-                 navigate(`/welcome/${username}`)
-        }else{
-                 setErrorMessage(true)
+        if (await authContext.login(username, password)) {
+            navigate(`/welcome/${username}`)
+        } else {
+            setShowErrorMessage(true)
         }
     }
 
+    return (
+        <div className="login-container">
 
-    return(
-        <div className="Login">
-            <h1>Time to Login!</h1>
-            <div className="LoginForm">
-               {showErroeMessage && <div className='FailureMessage'>Authentication Failed! Please check your credentials</div>}
-                <div>
+            <h1 className="login-title">Time to Login!</h1>
+
+            <div className="login-form">
+
+                {showErrorMessage && (
+                    <div className="error-message">
+                        Authentication Failed! Please check your credentials
+                    </div>
+                )}
+
+                <div className="input-group">
                     <label>Username</label>
-                    <input type="text" name="username" value={username} onChange={handleUsernameChange}/>
+                    <input 
+                        type="text"
+                        value={username}
+                        name="username"
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Enter username"
+                    />
                 </div>
-                <div>
+
+                <div className="input-group">
                     <label>Password</label>
-                    <input type="password" name="password" value={password} onChange={handlePasswordChange} />
+                    <input 
+                        type="password"
+                        value={password}
+                        name="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter password"
+                    />
                 </div>
-                <div>
-                    <button type="button" name="login" onClick={handleSubmit} >Login</button>
-                </div>
+
+                <button 
+                    type="button" 
+                    className="login-button"
+                    onClick={handleSubmit}
+                >
+                    Login
+                </button>
             </div>
 
         </div>
     )
 }
+
 export default LoginComponent

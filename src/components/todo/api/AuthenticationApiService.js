@@ -9,9 +9,9 @@ export const executeBasicAuthenticationService
     }
  )
 
- export const executeJwtAuthenticationService
- =(username, password ) => 
-    apiClient.post(`/authenticate`,{username ,password}
-   )
+
+export const executeJwtAuthenticationService = (username, password) => {
+    return apiClient.post('/authenticate', { username, password });
+};
 
    
