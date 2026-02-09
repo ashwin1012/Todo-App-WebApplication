@@ -43,10 +43,7 @@ function LoginComponent() {
 
                 <div className="input-group">
                     <label>Username</label>
-                    <input 
-                        type="text"
-                        value={username}
-                        name="username"
+                    <input  type="text" value={username}  name="username"
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="Enter username"
                     />
@@ -54,12 +51,9 @@ function LoginComponent() {
 
                 <div className="input-group">
                     <label>Password</label>
-                    <input 
-                        type="password"
-                        value={password}
-                        name="password"
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Enter password"
+                    <input type="password" value={password} name="password"
+                     onChange={(e) => setPassword(e.target.value)}
+                     placeholder="Enter password"
                     />
                 </div>
 
